@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine For You ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Pacifico&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --font-cute: 'Caveat', cursive;
+            --font-romantic: 'Pacifico', cursive;
+            --font-base: 'Quicksand', sans-serif;
+        }
+
+        body { font-family: var(--font-base); background-color: #050505; margin: 0; padding: 0; overflow: hidden; }
+        h1 { font-family: var(--font-romantic); }
+        p { font-family: var(--font-cute); }
+
+        .page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; overflow: hidden;
+        }
+        .page-hidden { opacity: 0; pointer-events: none; z-index: 0; }
+        .page-active { opacity: 1; pointer-events: auto; z-index: 20; }
+        
+        #fireworksCanvas, #heartsCanvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+        }
+        #fireworksCanvas { z-index: 1; transition: opacity 1s; }
+        #heartsCanvas { z-index: 25; opacity: 0; transition: opacity 1s; }
+        .hearts-running { opacity: 1 !important; }
+
+        /* Container gambar utama */
+        .img-wrapper {
+            position: relative; z-index: 40;
+            width: 80%; max-width: 280px;
+            margin-bottom: 2rem;
+        }
+
+        .sera-img {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+            border: 5px solid white;
+            transform: rotate(-2deg);
+        }
+
+        /* Lirik sekarang berdiri sendiri di kasta tertinggi (150) */
+        .lyric-container {
+            position: absolute;
+            bottom: 12%; /* Posisi pas di bawah foto tapi tetap di depan stiker */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 150;
+            width: 90%;
+            pointer-events: none;
+        }
+
+        .lyric-text {
+            display: inline-block;
+            text-shadow: 2px 2px 10px rgba(0,0,0,1);
+            background: rgba(0,0,0,0.6);
+            padding: 10px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 1.75rem;
+            line-height: 1.2;
+            color: white;
+        }
+
+        /* Sticker Wrapper: Z-index di tengah (80) */
+        .sticker-wrap {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 80;
+            pointer-events: none;
+        }
+        .sticker {
+            position: absolute;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+            border: 2.5px solid white; border-radius: 10px; background: white;
+        }
+        .s-sm { width: 55px; }
+        .s-md { width: 75px; }
+        .s-lg { width: 90px; }
+
+        .cursor::after { content: '|'; animation: blink 1s step-end infinite; color: #ec4899; }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body class="text-white">
+    
+    <audio id="bgMusic" src="./music/kota ini.mp4"></audio>
+    <canvas id="fireworksCanvas"></canvas>
+    <canvas id="heartsCanvas"></canvas>
+
+    <div id="startScreen" class="absolute inset-0 z-[200] flex flex-col items-center justify-center bg-[#050505] p-6 text-center">
+        <img src="./img/download (20).jpg" class="w-24 h-24 rounded-full border-4 border-pink-500 mb-6 object-cover shadow-2xl">
+        <h2 class="text-2xl text-pink-300 mb-8" style="font-family: var(--font-cute);">Buka pesan dari aku...</h2>
+        <button onclick="startExperience()" class="bg-pink-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transform active:scale-95 transition-all">
+            Buka Sekarang ❤️
+        </button>
+    </div>
+
+    <div id="page1" class="page page-hidden">
+        <h1 id="titleText" class="text-5xl md:text-7xl text-pink-400 opacity-0 transition-opacity duration-1000 mb-10">Happy Valentine!</h1>
+        <div class="lyric-container">
+            <p id="lyric1" class="lyric-text min-h-[3rem] cursor"></p>
+        </div>
+    </div>
+
+    <div id="page2" class="page page-hidden bg-gradient-to-b from-gray-950 via-rose-950 to-gray-950">
+        <div class="sticker-wrap">
+            <img src="./img/bunga 1.png" class="sticker s-lg top-[8%] left-[6%] -rotate-12">
+            <img src="./img/download (20).jpg" class="sticker s-md top-[22%] right-[10%] rotate-12">
+            <img src="./img/poofy.jpg" class="sticker s-sm bottom-[40%] left-[12%] rotate-6">
+            <img src="./img/ALIEN ˚✧₊˳༚.jpg" class="sticker s-md bottom-[18%] right-[8%] -rotate-6">
+        </div>
+        <div class="img-wrapper">
+            <img src="./img/sera1.jpeg" class="sera-img" style="transform: rotate(2deg);">
+        </div>
+        <div class="lyric-container">
+            <p id="lyric2" class="lyric-text min-h-[4rem] cursor"></p>
+        </div>
+    </div>
+
+    <div id="page3" class="page page-hidden bg-gradient-to-b from-gray-950 via-rose-950 to-gray-950">
+        <div class="sticker-wrap">
+            <img src="./img/download (22).jpg" class="sticker s-lg top-[10%] right-[8%] rotate-12">
+            <img src="./img/bunga 2.png" class="sticker s-md top-[28%] left-[10%] -rotate-12">
+            <img src="./img/download (21).jpg" class="sticker s-sm bottom-[35%] right-[15%] rotate-6">
+            <img src="./img/Pegatinas_ Snoopy.jpg" class="sticker s-md bottom-[12%] left-[8%] rotate-12">
+        </div>
+        <div class="img-wrapper">
+            <img src="./img/sera2.jpeg" class="sera-img">
+        </div>
+        <div class="lyric-container">
+            <p id="lyric3" class="lyric-text min-h-[4rem] cursor"></p>
+        </div>
+    </div>
+
+    <div id="page4" class="page page-hidden bg-gradient-to-b from-gray-950 via-rose-950 to-gray-950">
+        <div class="sticker-wrap">
+            <img src="./img/bunga 3.png" class="sticker s-lg top-[5%] right-[12%] rotate-6">
+            <img src="./img/download (19).jpg" class="sticker s-md top-[25%] left-[8%] -rotate-12">
+            <img src="./img/download (20).jpg" class="sticker s-sm bottom-[45%] right-[8%] rotate-12">
+            <img src="./img/download (22).jpg" class="sticker s-md bottom-[15%] left-[12%] -rotate-6">
+        </div>
+        <div class="img-wrapper">
+            <img src="./img/sera 4.jpeg" class="sera-img" style="transform: rotate(-3deg);">
+        </div>
+        <div class="lyric-container">
+            <p id="lyric4" class="lyric-text min-h-[4rem] cursor"></p>
+        </div>
+    </div>
+
+    <div id="page5" class="page page-hidden bg-gradient-to-b from-gray-950 via-rose-950 to-gray-950">
+        <div class="sticker-wrap">
+            <img src="./img/download (19).jpg" class="sticker s-lg top-[15%] left-[10%] -rotate-6">
+            <img src="./img/bunga 2.png" class="sticker s-md top-[18%] right-[8%] rotate-12">
+            <img src="./img/download (21).jpg" class="sticker s-sm bottom-[40%] left-[8%] rotate-12">
+            <img src="./img/poofy.jpg" class="sticker s-lg bottom-[15%] right-[12%] rotate-6">
+        </div>
+        <div class="img-wrapper">
+            <img src="./img/sera5.jpeg" class="sera-img">
+        </div>
+        <div class="lyric-container">
+            <p id="lyric5" class="lyric-text min-h-[3rem] cursor"></p>
+            <div id="finalText" class="mt-4 text-pink-300 text-3xl opacity-0 transition-opacity duration-1000" style="font-family: var(--font-romantic);">Mungkin 3 atau 4 hari lagi❤️</div>
+        </div>
+    </div>
+
+    <script>
+        const bgMusic = document.getElementById("bgMusic");
+        let fireworksActive = false, heartsActive = false;
+
+        function fadeAudio(audio, type, duration) {
+            const steps = 20, stepTime = duration / steps; let currentStep = 0;
+            if (type === 'in') { audio.volume = 0; audio.play(); }
+            const fadeInterval = setInterval(() => {
+                currentStep++;
+                audio.volume = type === 'in' ? currentStep / steps : 1 - (currentStep / steps);
+                if (currentStep >= steps) { clearInterval(fadeInterval); if (type === 'out') audio.pause(); }
+            }, stepTime);
+        }
+
+        const timeline = [
+            { time: 1000,  text: "Jatuh cinta memang manis...", targetId: "lyric1", pageIndex: 1, speed: 90 },
+            { time: 6500,  text: "Apalagi ada kamu di sini...", targetId: "lyric2", pageIndex: 2, speed: 90 },
+            { time: 12500, text: "Genggam tanganku sayang...", targetId: "lyric3", pageIndex: 3, speed: 90 },
+            { time: 18000, text: "Kota ini tak sama tanpamu...", targetId: "lyric4", pageIndex: 4, speed: 55 },
+            { time: 23500, text: "Masih rasa ingin lagi habiskan waktu di sini...", targetId: "lyric5", pageIndex: 5, speed: 55 }
+        ];
+
+        function typeWriter(text, elementId, speed) {
+            const el = document.getElementById(elementId);
+            el.innerHTML = ''; el.classList.add('cursor'); let i = 0;
+            function type() {
+                if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(type, speed); } 
+                else { setTimeout(() => el.classList.remove('cursor'), 1000); }
+            } type();
+        }
+
+        function showPage(index) {
+            document.querySelectorAll('.page').forEach(p => { p.classList.add('page-hidden'); p.classList.remove('page-active'); });
+            const activePage = document.getElementById(`page${index}`);
+            activePage.classList.remove('page-hidden'); activePage.classList.add('page-active');
+            
+            fireworksActive = (index === 1);
+            const fCanvas = document.getElementById("fireworksCanvas");
+            fCanvas.style.opacity = index === 1 ? '1' : '0';
+
+            heartsActive = (index > 1);
+            document.getElementById("heartsCanvas").classList.toggle('hearts-running', index > 1);
+        }
+
+        function startExperience() {
+            document.getElementById('startScreen').style.opacity = '0';
+            setTimeout(() => document.getElementById('startScreen').style.display = 'none', 1000);
+            fadeAudio(bgMusic, 'in', 3000);
+            showPage(1);
+            animateFireworks(); animateHearts();
+            setTimeout(() => document.getElementById('titleText').classList.add('opacity-100'), 500);
+            timeline.forEach(item => {
+                setTimeout(() => {
+                    showPage(item.pageIndex);
+                    typeWriter(item.text, item.targetId, item.speed);
+                    if(item.pageIndex === 5) {
+                        setTimeout(() => document.getElementById('finalText').classList.add('opacity-100'), 5000);
+                        setTimeout(() => fadeAudio(bgMusic, 'out', 4000), 15000);
+                    }
+                }, item.time);
+            });
+        }
+
+        const fCanvas = document.getElementById("fireworksCanvas"), fCtx = fCanvas.getContext("2d");
+        fCanvas.width = window.innerWidth; fCanvas.height = window.innerHeight;
+        let fParticles = [];
+        class FParticle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y; this.color = color; this.radius = Math.random() * 3 + 1;
+                const angle = Math.random() * Math.PI * 2, speed = Math.random() * 10 + 2;
+                this.velocity = { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed };
+                this.alpha = 1; this.friction = 0.95; this.gravity = 0.1;
+            }
+            draw() { fCtx.save(); fCtx.globalAlpha = this.alpha; fCtx.beginPath(); fCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); fCtx.fillStyle = this.color; fCtx.fill(); fCtx.restore(); }
+            update() { this.velocity.x *= this.friction; this.velocity.y *= this.friction; this.velocity.y += this.gravity; this.x += this.velocity.x; this.y += this.velocity.y; this.alpha -= 0.01; }
+        }
+        function animateFireworks() {
+            if (!fireworksActive && fParticles.length === 0) return;
+            requestAnimationFrame(animateFireworks);
+            fCtx.fillStyle = 'rgba(5, 5, 5, 0.2)'; fCtx.fillRect(0, 0, fCanvas.width, fCanvas.height);
+            fParticles.forEach((p, i) => { if (p.alpha > 0) { p.update(); p.draw(); } else fParticles.splice(i, 1); });
+            if (fireworksActive && Math.random() < 0.15) {
+                const colors = ['#ff0040', '#00e6ff', '#ffea00', '#ffffff'];
+                const x = Math.random() * fCanvas.width, y = Math.random() * (fCanvas.height * 0.5), color = colors[Math.floor(Math.random() * colors.length)];
+                for (let i = 0; i < 80; i++) fParticles.push(new FParticle(x, y, color));
+            }
+        }
+
+        const hCanvas = document.getElementById("heartsCanvas"), hCtx = hCanvas.getContext("2d");
+        hCanvas.width = window.innerWidth; hCanvas.height = window.innerHeight;
+        let hearts = [];
+        class Heart {
+            constructor() { this.x = Math.random() * hCanvas.width; this.y = hCanvas.height + 10; this.speed = Math.random() * 2 + 1; this.size = Math.random() * 20 + 10; this.opacity = 1; }
+            update() { this.y -= this.speed; this.opacity -= 0.003; }
+            draw() { hCtx.fillStyle = `rgba(255, 105, 180, ${this.opacity})`; hCtx.font = `${this.size}px serif`; hCtx.fillText('❤️', this.x, this.y); }
+        }
+        function animateHearts() {
+            requestAnimationFrame(animateHearts);
+            hCtx.clearRect(0, 0, hCanvas.width, hCanvas.height);
+            if (!heartsActive) return;
+            if (Math.random() < 0.2) hearts.push(new Heart());
+            hearts.forEach((h, i) => { h.update(); h.draw(); if (h.opacity <= 0 || h.y < -50) hearts.splice(i, 1); });
+        }
+        window.addEventListener('resize', () => { fCanvas.width = hCanvas.width = window.innerWidth; fCanvas.height = hCanvas.height = window.innerHeight; });
+    </script>
+</body>
+</html>
